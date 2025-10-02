@@ -6,10 +6,6 @@ package user_service.v1;
 
 // ============ Custodial Wallet ============
 
-message GetCustodialAddressRequest {
-  string chain_id = 1;  // CAIP-2 format (e.g., "solana:mainnet-beta")
-}
-
 message GetCustodialAddressResponse {
   string address = 1;
   string chain = 2;
