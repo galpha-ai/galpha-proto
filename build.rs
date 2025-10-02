@@ -14,7 +14,13 @@ fn main() -> Result<()> {
 
     // Compile the proto files with prost
     // Note: pbjson will add serde Serialize/Deserialize traits automatically
-    config.compile_protos(&["proto/ledger/v1/http.proto"], &["proto/"])?;
+    config.compile_protos(
+        &[
+            "proto/ledger/v1/http.proto",
+            "proto/position_manager/v1/rpc.proto",
+        ],
+        &["proto/"]
+    )?;
 
     // Read the descriptor file
     let descriptor_set = std::fs::read(&descriptor_path)?;
@@ -22,7 +28,7 @@ fn main() -> Result<()> {
     // Generate pbjson code for JSON serialization
     pbjson_build::Builder::new()
         .register_descriptors(&descriptor_set)?
-        .build(&[".ledger.v1"])?;
+        .build(&[".ledger.v1", ".position_manager.v1"])?;
 
     Ok(())
 }

@@ -12,3 +12,13 @@ pub mod ledger {
         include!(concat!(env!("OUT_DIR"), "/ledger.v1.serde.rs"));
     }
 }
+
+pub mod position_manager {
+    pub mod rpc {
+        // Include the generated prost code
+        include!(concat!(env!("OUT_DIR"), "/position_manager.v1.rs"));
+
+        // Include the generated pbjson serialization implementations
+        include!(concat!(env!("OUT_DIR"), "/position_manager.v1.serde.rs"));
+    }
+}

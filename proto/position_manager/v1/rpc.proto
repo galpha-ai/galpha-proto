@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package position_manager.v1;
+
+// Request for getting positions
+message GetPositionsRequest {
+  string wallet = 1;
+  repeated string tokens = 2;  // optional, filter by specific tokens
+}
+
+// Response containing positions
+message GetPositionsResponse {
+  string wallet = 1;
+  repeated Position positions = 2;
+  uint64 timestamp = 3;
+}
+
+// A single position
+message Position {
+  string token = 1;
+  string balance = 2;
+  string mint = 3;
+  uint32 decimals = 4;
+}
