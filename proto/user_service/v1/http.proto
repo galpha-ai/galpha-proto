@@ -6,13 +6,15 @@ package user_service.v1;
 
 // ============ Custodial Wallet ============
 
-message WalletCustodialAddressData {
+// Inner data structure
+message CustodialAddress {
   string address = 1;
   string chain_id = 2;
 }
 
+// API response wrapper for GetCustodialAddress endpoint
 message GetCustodialAddressResponse {
   bool success = 1;
-  WalletCustodialAddressData data = 2;
+  CustodialAddress data = 2;
   string timestamp = 3;
 }
