@@ -4,17 +4,15 @@ package user_service.v1;
 
 // HTTP API request and response messages for User Service
 
-// ============ API Response Wrapper ============
-
-message ApiResponse {
-  bool success = 1;
-  WalletCustodialAddressData data = 2;
-  string timestamp = 3;
-}
-
 // ============ Custodial Wallet ============
 
 message WalletCustodialAddressData {
   string address = 1;
   string chain_id = 2;
+}
+
+message GetCustodialAddressResponse {
+  bool success = 1;
+  WalletCustodialAddressData data = 2;
+  string timestamp = 3;
 }
