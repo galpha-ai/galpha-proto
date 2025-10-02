@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package user_service.v1;
+
+// HTTP API request and response messages for User Service
+
+// ============ Custodial Wallet ============
+
+message GetCustodialAddressResponse {
+  string address = 1;
+  string chain = 2;
+}

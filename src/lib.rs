@@ -22,3 +22,13 @@ pub mod position_manager {
         include!(concat!(env!("OUT_DIR"), "/position_manager.v1.serde.rs"));
     }
 }
+
+pub mod user_service {
+    pub mod http {
+        // Include the generated prost code
+        include!(concat!(env!("OUT_DIR"), "/user_service.v1.rs"));
+
+        // Include the generated pbjson serialization implementations
+        include!(concat!(env!("OUT_DIR"), "/user_service.v1.serde.rs"));
+    }
+}

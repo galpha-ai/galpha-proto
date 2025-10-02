@@ -18,6 +18,7 @@ fn main() -> Result<()> {
         &[
             "proto/ledger/v1/http.proto",
             "proto/position_manager/v1/rpc.proto",
+            "proto/user_service/v1/http.proto",
         ],
         &["proto/"]
     )?;
@@ -28,7 +29,7 @@ fn main() -> Result<()> {
     // Generate pbjson code for JSON serialization
     pbjson_build::Builder::new()
         .register_descriptors(&descriptor_set)?
-        .build(&[".ledger.v1", ".position_manager.v1"])?;
+        .build(&[".ledger.v1", ".position_manager.v1", ".user_service.v1"])?;
 
     Ok(())
 }
