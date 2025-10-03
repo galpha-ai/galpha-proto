@@ -26,9 +26,10 @@ fn main() -> Result<()> {
     // Read the descriptor file
     let descriptor_set = std::fs::read(&descriptor_path)?;
 
-    // Generate pbjson code for JSON serialization
+    // Generate pbjson code for JSON serialization with snake_case field names
     pbjson_build::Builder::new()
         .register_descriptors(&descriptor_set)?
+        .preserve_proto_field_names()
         .build(&[".ledger.v1", ".position_manager.v1", ".user_service.v1"])?;
 
     Ok(())
