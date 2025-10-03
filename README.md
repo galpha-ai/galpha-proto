@@ -1,17 +1,18 @@
 # Galpha Proto
 
-Protocol Buffers definitions for Galpha services, with automatic Rust code generation.
+Protocol Buffers definitions for Galpha services, with automatic Rust and TypeScript code generation.
 
 ## Overview
 
-This crate provides shared protobuf definitions for the Galpha ecosystem. It uses [prost](https://github.com/tokio-rs/prost) for generating Rust structs and [pbjson](https://github.com/influxdata/pbjson) for JSON serialization support.
+This crate provides shared protobuf definitions for the Galpha ecosystem. It uses [prost](https://github.com/tokio-rs/prost) for generating Rust structs and [pbjson](https://github.com/influxdata/pbjson) for JSON serialization support. For TypeScript/JavaScript projects, it uses [protobuf.js](https://github.com/protobufjs/protobuf.js) for code generation.
 
 ## Features
 
 - 🔧 **Type-safe API definitions** - Protocol buffers ensure type safety across services
-- 📦 **JSON serialization** - All types support `serde::Serialize` and `serde::Deserialize`
-- 🏗️ **Automatic code generation** - Rust code is generated at build time from `.proto` files
+- 📦 **JSON serialization** - All types support serialization in both Rust and TypeScript
+- 🏗️ **Automatic code generation** - Code is generated at build time from `.proto` files
 - 📚 **Hierarchical module structure** - Clean, organized access to types via `service::module::Type`
+- 🌐 **Multi-language support** - Works seamlessly with Rust and TypeScript/JavaScript
 
 ## Module Structure
 
@@ -45,7 +46,9 @@ galpha_proto
 
 ## Usage
 
-### Adding as a dependency
+### Rust Usage
+
+#### Adding as a dependency
 
 Add to your `Cargo.toml`:
 
@@ -54,7 +57,7 @@ Add to your `Cargo.toml`:
 galpha-proto = { path = "../galpha-proto" }
 ```
 
-### Using in code
+#### Using in code
 
 ```rust
 use galpha_proto::ledger::http::{
@@ -84,6 +87,84 @@ println!("{}", json);
 
 // Deserialize from JSON
 let parsed: GetBalanceResponse = serde_json::from_str(&json).unwrap();
+```
+
+### TypeScript/JavaScript Usage
+
+#### Installation
+
+Using npm:
+```bash
+npm install @galpha/proto
+```
+
+Using pnpm:
+```bash
+pnpm add @galpha/proto
+```
+
+Or from local path in package.json:
+```json
+{
+  "dependencies": {
+    "@galpha/proto": "file:../galpha-proto"
+  }
+}
+```
+
+#### Using in TypeScript code
+
+```typescript
+import {
+  GetBalanceRequest,
+  GetBalanceResponse,
+  StakeRequest,
+  StakeResponse,
+  Root
+} from '@galpha/proto';
+
+// Create a message using the constructor
+const request = Root.ledger.v1.GetBalanceRequest.create({});
+
+// Create a response
+const response = Root.ledger.v1.GetBalanceResponse.create({
+  userId: "user123",
+  tradingBalance: "1000.50",
+  stakedBalance: "500.00",
+  totalBalance: "1500.50",
+  yieldAccumulated: "10.25",
+  version: 1
+});
+
+// Serialize to JSON
+const json = Root.ledger.v1.GetBalanceResponse.toObject(response);
+console.log(json);
+
+// Deserialize from JSON
+const parsed = Root.ledger.v1.GetBalanceResponse.fromObject(json);
+
+// Encode to binary (for network transmission)
+const buffer = Root.ledger.v1.GetBalanceResponse.encode(response).finish();
+
+// Decode from binary
+const decoded = Root.ledger.v1.GetBalanceResponse.decode(buffer);
+```
+
+#### Using with HTTP APIs
+
+```typescript
+import { GetBalanceResponse, Root } from '@galpha/proto';
+import axios from 'axios';
+
+// Fetch from API
+const response = await axios.get('/api/balance');
+
+// Parse the JSON response
+const balance = Root.ledger.v1.GetBalanceResponse.fromObject(response.data);
+
+console.log(`Total balance: ${balance.totalBalance}`);
+console.log(`Trading balance: ${balance.tradingBalance}`);
+console.log(`Staked balance: ${balance.stakedBalance}`);
 ```
 
 ## API Reference
@@ -217,33 +298,60 @@ pub struct GetQuoteResponse {
 
 ```
 galpha-proto/
-├── Cargo.toml           # Package configuration
-├── build.rs             # Build script for code generation
-├── proto/               # Protocol buffer definitions
-│   └── ledger/
-│       └── v1/
-│           └── http.proto
-└── src/
-    └── lib.rs           # Generated code is included here
+├── Cargo.toml              # Rust package configuration
+├── package.json            # NPM package configuration
+├── tsconfig.json           # TypeScript configuration
+├── build.rs                # Rust build script
+├── proto/                  # Protocol buffer definitions
+│   ├── ledger/v1/
+│   │   └── http.proto
+│   ├── position_manager/v1/
+│   │   └── rpc.proto
+│   └── user_service/v1/
+│       └── http.proto
+├── src/
+│   └── lib.rs              # Rust library entry point
+├── dist/                   # Generated TypeScript/JavaScript (gitignored)
+│   ├── proto.js
+│   ├── proto.d.ts
+│   └── index.ts
+└── scripts/
+    └── generate-index.js   # TypeScript code generation helper
 ```
 
 ### Adding New Definitions
 
 1. Edit or create `.proto` files in `proto/` directory
-2. Update `build.rs` if adding new proto files
-3. Run `cargo build` to generate Rust code
+2. **For Rust:**
+   - Update `build.rs` to include the new proto files
+   - Run `cargo build` to generate Rust code
+3. **For TypeScript:**
+   - Update `package.json` scripts to include the new proto files
+   - Run `npm run generate` to regenerate TypeScript code
 4. The generated types will be available under the corresponding module path
 
 ### Build Process
 
-The build process is handled by `build.rs`:
+#### Rust Build Process
+
+The Rust build process is handled by `build.rs`:
 
 1. **prost-build** compiles `.proto` files to Rust structs
 2. **pbjson-build** generates `serde::Serialize` and `serde::Deserialize` implementations
 3. Generated code is placed in `$OUT_DIR` and included via `include!()` macro
 
+#### TypeScript Build Process
+
+The TypeScript build process uses npm scripts:
+
+1. **pbjs** compiles `.proto` files to JavaScript code
+2. **pbts** generates TypeScript type definitions from the JavaScript code
+3. **generate-index.js** creates convenient re-exports and type aliases
+4. Generated code is placed in `dist/` directory
+
 ### Regenerating Code
 
+#### Rust
 ```bash
 # Clean and rebuild
 cargo clean
@@ -251,6 +359,20 @@ cargo build
 
 # Check generated code (optional)
 cargo expand
+```
+
+#### TypeScript
+```bash
+# Install dependencies
+npm install
+
+# Generate TypeScript code
+npm run generate
+
+# Or step by step:
+npm run clean           # Remove old generated files
+npm run generate:js     # Generate JavaScript
+npm run generate:ts     # Generate TypeScript definitions
 ```
 
 ## Notes
