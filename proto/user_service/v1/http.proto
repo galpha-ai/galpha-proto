@@ -37,18 +37,11 @@ message RefreshTradingAccountsRequest {
   optional string chain_id = 1; // CAIP-2 format, null means refresh all chains
 }
 
-// Response data for refresh trading accounts
-message RefreshTradingAccountsData {
+// Response for refresh trading accounts
+message RefreshTradingAccountsResponse {
   string user_id = 1;
   repeated string refreshed_chains = 2;
   repeated TradingAccount accounts = 3;
-}
-
-// API response wrapper for RefreshTradingAccounts endpoint
-message RefreshTradingAccountsResponse {
-  bool success = 1;
-  RefreshTradingAccountsData data = 2;
-  string timestamp = 3;
 }
 
 // User information structure (matches UserInfo in user-service)
@@ -62,11 +55,4 @@ message UserInfo {
   optional string avatar_url = 7;
   string created_at = 8;
   optional string last_login_at = 9;
-}
-
-// API response wrapper for GetUserByTradingAccount endpoint
-message GetUserByTradingAccountResponse {
-  bool success = 1;
-  UserInfo data = 2;
-  string timestamp = 3;
 }
