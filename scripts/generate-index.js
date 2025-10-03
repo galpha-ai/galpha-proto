@@ -48,6 +48,10 @@ export type Position = proto.position_manager.v1.Position;
 
 export type GetCustodialAddressResponse = proto.user_service.v1.GetCustodialAddressResponse;
 export type CustodialAddress = proto.user_service.v1.CustodialAddress;
+export type TradingAccount = proto.user_service.v1.TradingAccount;
+export type RefreshTradingAccountsRequest = proto.user_service.v1.RefreshTradingAccountsRequest;
+export type RefreshTradingAccountsResponse = proto.user_service.v1.RefreshTradingAccountsResponse;
+export type UserInfo = proto.user_service.v1.UserInfo;
 
 // Utility functions for JSON serialization/deserialization
 export const util = {
