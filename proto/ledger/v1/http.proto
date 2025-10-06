@@ -48,7 +48,9 @@ message CreateUnstakingResponse {
 
 message CreateWithdrawalRequest {
   string amount = 1;
-  string asset = 2;  
+  string asset = 2;
+  optional string chain_id = 3;  // Target chain for withdrawal (CAIP-2 format)
+  optional string destination_address = 4;  // Destination address (null = user's wallet)
 }
 
 message CreateWithdrawalResponse {
