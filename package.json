@@ -1,6 +1,6 @@
 {
   "name": "@galpha/proto",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Protocol Buffers definitions for Galpha services with TypeScript support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
