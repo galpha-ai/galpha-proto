@@ -56,3 +56,32 @@ message UserInfo {
   string created_at = 8;
   optional string last_login_at = 9;
 }
+
+// ============ Custodial Signing ============
+
+// Request for signing a transaction with custodial wallet
+message WalletCustodialSignRequest {
+  string transaction_bytes = 1; // Base64 encoded transaction bytes
+  string chain_id = 2; // CAIP-2 format (e.g., "solana:mainnet-beta", "solana:devnet")
+}
+
+// Response for custodial transaction signing
+message WalletCustodialSignResponse {
+  string signature = 1;          // Transaction signature as string
+  string signed_transaction = 2; // Base64 encoded signed transaction bytes
+}
+
+// ============ Authentication & Token Management ============
+
+// Request for refreshing access token
+message AuthRefreshTokenRequest {
+  string refresh_token = 1; // UUID format refresh token
+}
+
+// Response for refreshing access token
+message AuthRefreshTokenResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string token_type = 3;      // "Bearer"
+  uint64 expires_in = 4;      // Token expiration time in seconds
+}
