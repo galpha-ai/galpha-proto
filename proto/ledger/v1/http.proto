@@ -10,6 +10,20 @@ message GetBalanceRequest {
   // No fields needed - uses user_id from auth context
 }
 
+message TradingAccountSnapshot {
+  string chain_id = 1;  // CAIP-2 format (e.g., "eip155:56", "solana:mainnet-beta")
+  string address = 2;   // Trading account address on this chain
+  map<string, string> assets = 3;  // Asset symbol -> amount (e.g., "USDC": "100.50", "NATIVE": "0.005")
+  string updated_at = 4;  // RFC3339 timestamp
+}
+
+message PurchasingPower {
+  string aiusd_ledger = 1;      // AIUSD balance in ledger
+  string onchain_stables = 2;   // Sum of whitelisted stablecoins across all trading accounts
+  string total = 3;             // aiusd_ledger + onchain_stables
+  string note = 4;              // Explanatory note (e.g., "On-chain stablecoins are not AIUSD liabilities until converted")
+}
+
 message GetBalanceResponse {
   string user_id = 1;
   string trading_balance = 2;  // available balance
@@ -17,6 +31,8 @@ message GetBalanceResponse {
   string total_balance = 4;
   string yield_accumulated = 5;
   int32 version = 6;
+  repeated TradingAccountSnapshot trading_accounts = 7;  // Per-chain trading account balances
+  optional PurchasingPower purchasing_power = 8;  // Purchasing power calculation
 }
 
 // ============ Stake ============
