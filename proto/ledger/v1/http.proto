@@ -17,6 +17,7 @@ message GetBalanceResponse {
   string total_balance = 4;
   string yield_accumulated = 5;
   int32 version = 6;
+  string total_earned = 7;  // Total earned from all completed yield distributions
 }
 
 // ============ Stake ============
