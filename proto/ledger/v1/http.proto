@@ -169,6 +169,26 @@ message GetTvlResponse {
   string tvl = 1;  // Total value locked
 }
 
+// ============ Gas Top-up ============
+
+message EnsureGasRequest {
+  string chain_id = 1;  // CAIP-2 format (e.g., "eip155:31337")
+  string min_native = 2;  // Minimum native token balance required (e.g., "0.01")
+  optional string idempotency_key = 3;  // Optional idempotency key for the request
+}
+
+message EnsureGasResponse {
+  string action = 1;  // "topped_up" or "noop"
+  string native_before = 2;  // Native balance before top-up
+  string native_after = 3;  // Native balance after top-up
+  string native_delta = 4;  // Amount of native tokens added
+  string aiusd_debited = 5;  // Amount of AIUSD debited
+  optional string tx_hash = 6;  // Transaction hash if topped up
+  optional bool gas_ready = 7;  // Whether gas is ready after polling
+  optional string observed_native_after = 8;  // Observed balance after polling
+  optional int64 wait_ms = 9;  // Milliseconds waited for balance update
+}
+
 // ============ Error Response ============
 
 message ErrorResponse {
