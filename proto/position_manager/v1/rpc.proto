@@ -26,4 +26,6 @@ message Position {
   uint32 decimals = 4;
   optional double currentPrice = 5;  // Current price per token in USD
   optional string totalValue = 6;    // Total USD value of the position
+  string logo_url = 7;    // Token log url (not support solana)
+
 }
