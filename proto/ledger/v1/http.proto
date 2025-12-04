@@ -190,6 +190,31 @@ message EnsureGasResponse {
   optional int64 wait_ms = 9;  // Milliseconds waited for balance update
 }
 
+// ============ Buy AIUSD ============
+
+message BuyAiusdRequest {
+  string mode = 1;  // "direct" or "tim"
+  string chain_id = 2;  // CAIP-2 format (e.g., "solana:mainnet-beta", "eip155:1")
+  optional string asset = 3;  // Required for direct mode: USDC, USDT, USD1
+  optional string amount = 4;  // Required for direct mode
+  optional string intent = 5;  // Required for tim mode
+  optional uint32 slippage_bps = 6;  // Slippage tolerance in basis points
+  string idempotency_key = 7;  // Idempotency key to prevent duplicate requests
+  bool auto_stake = 8;  // Whether to automatically stake the credited AIUSD
+}
+
+message BuyAiusdResponse {
+  bool success = 1;
+  string transaction_id = 2;  // UUID
+  string mode = 3;  // "direct" or "tim"
+  string aiusd_credited = 4;  // Amount of AIUSD credited
+  string new_aiusd_balance = 5;  // New AIUSD balance after credit
+  string blockchain_tx_id = 6;  // Blockchain transaction hash/signature
+  string created_at = 7;  // RFC3339 timestamp
+  bool auto_staked = 8;  // Whether auto-stake was performed
+  optional string stake_transaction_id = 9;  // Stake transaction ID if auto-stake was performed
+}
+
 // ============ Error Response ============
 
 message ErrorResponse {
