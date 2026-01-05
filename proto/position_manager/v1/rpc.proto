@@ -27,5 +27,6 @@ message Position {
   optional double currentPrice = 5;  // Current price per token in USD
   optional string totalValue = 6;    // Total USD value of the position
   optional string logo_url = 7;    // Token log url (not support solana)
-
+  string blockchain = 8;
+  string tokenName = 9;
 }
